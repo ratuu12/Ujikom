@@ -38,46 +38,58 @@ if (!$data) {
 </div>
 
 <div class="container">
-    <div class="card slip-box">
+    <div class="card slip-box" style="max-width:550px;">
         <h2>SLIP GAJI KARYAWAN</h2>
         <p style="text-align:center; color:#7c4dff; font-weight:bold; margin-bottom:20px; margin-top:-15px;">
             PERIODE <?php echo strtoupper($data['periode']); ?>
         </p>
 
-        <div class="slip-row">
-            <span>Nama Karyawan</span>
+        <!-- Data karyawan: NAMA, NIK, JABATAN -->
+        <div class="form-inline">
+            <label>NAMA</label>
             <span><?php echo $data['nama']; ?></span>
         </div>
-        <div class="slip-row">
-            <span>NIK</span>
+        <div class="form-inline">
+            <label>NIK</label>
             <span><?php echo $data['nik']; ?></span>
         </div>
-        <div class="slip-row">
-            <span>Jabatan</span>
+        <div class="form-inline">
+            <label>JABATAN</label>
             <span><?php echo $data['jabatan']; ?></span>
         </div>
-        <div class="slip-row">
-            <span>Gaji Pokok</span>
-            <span>Rp<?php echo number_format($data['gaji_pokok'], 0, ',', '.'); ?></span>
-        </div>
-        <div class="slip-row">
-            <span>Lembur</span>
-            <span>Rp<?php echo number_format($data['lembur'], 0, ',', '.'); ?></span>
-        </div>
-        <div class="slip-row">
-            <span>Total Penghasilan</span>
-            <span>Rp<?php echo number_format($data['total_penghasilan'], 0, ',', '.'); ?></span>
-        </div>
-        <div class="slip-row">
-            <span>Pinjaman</span>
-            <span>Rp<?php echo number_format($data['pinjaman'], 0, ',', '.'); ?></span>
-        </div>
-        <div class="slip-row">
-            <span>Total Potongan</span>
-            <span>Rp<?php echo number_format($data['total_potongan'], 0, ',', '.'); ?></span>
+
+        <!-- Dua kolom: PENGHASILAN di kiri, POTONGAN di kanan -->
+        <div class="dua-kolom">
+            <div>
+                <div class="kolom-judul">PENGHASILAN</div>
+                <div class="slip-row">
+                    <span>Gaji Pokok</span>
+                    <span>Rp<?php echo number_format($data['gaji_pokok'], 0, ',', '.'); ?></span>
+                </div>
+                <div class="slip-row">
+                    <span>Lembur</span>
+                    <span>Rp<?php echo number_format($data['lembur'], 0, ',', '.'); ?></span>
+                </div>
+                <div class="slip-row">
+                    <span>Total Penghasilan</span>
+                    <span>Rp<?php echo number_format($data['total_penghasilan'], 0, ',', '.'); ?></span>
+                </div>
+            </div>
+            <div>
+                <div class="kolom-judul">POTONGAN</div>
+                <div class="slip-row">
+                    <span>Pinjaman Karyawan</span>
+                    <span>Rp<?php echo number_format($data['pinjaman'], 0, ',', '.'); ?></span>
+                </div>
+                <div class="slip-row">
+                    <span>Total Potongan</span>
+                    <span>Rp<?php echo number_format($data['total_potongan'], 0, ',', '.'); ?></span>
+                </div>
+            </div>
         </div>
 
-        <div class="slip-total">
+        <!-- Gaji Bersih -->
+        <div class="gaji-bersih-bar">
             <span>GAJI BERSIH</span>
             <span>Rp<?php echo number_format($data['gaji_bersih'], 0, ',', '.'); ?></span>
         </div>
