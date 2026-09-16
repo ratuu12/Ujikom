@@ -152,3 +152,104 @@ Sebelum data bisa disimpan, user harus menjawab soal perkalian sederhana (misaln
 - Password default (`admin123`) sebaiknya diganti setelah aplikasi benar-benar dipakai.
 - Fitur Share ke Gmail hanya membuka draft email yang sudah terisi otomatis — pengiriman tetap harus dilakukan manual oleh pengguna dengan klik tombol "Kirim" di Gmail.
 - Perhitungan gaji sengaja dihitung ulang di PHP (bukan hanya JavaScript) untuk mencegah manipulasi data dari sisi browser.
+
+Seputar Alur & Konsep Dasar
+
+"Coba jelasin alur aplikasinya dari awal sampai akhir."
+
+"Jadi alurnya, user login dulu di login.php, kalau berhasil masuk ke dashboard.php yang nampilin semua data slip gaji. Dari situ user bisa klik Tambah Data, nanti muncul popup pilih periode dulu, baru masuk ke form. Setelah diisi dan submit, datanya dihitung dan disimpan ke database lewat simpan.php, terus balik lagi ke dashboard. User juga bisa lihat detail, hapus, atau share data yang udah ada."
+
+"Kenapa pakai PHP native, bukan framework?"
+
+"Karena saya masih belajar dasar-dasarnya dulu, Pak/Bu. PHP native bikin saya lebih paham alur kodenya dari nol — gimana data dari form sampai ke database, gimana session bekerja — tanpa disembunyikan sama struktur framework."
+
+"Apa bedanya file 'tampilan' sama file 'proses' di project kamu?"
+
+"File tampilan itu yang punya HTML, kayak login.php atau dashboard.php — itu yang dilihat user. File proses itu yang isinya cuma logika PHP, gak ada tampilan, kayak proses_login.php atau simpan.php — dia cuma ngolah data terus langsung redirect ke halaman lain."
+
+"Kenapa setiap halaman ada session_start()?"
+
+"Karena PHP butuh session_start() di setiap halaman yang mau akses atau simpan data session — kalau gak ada itu, PHP gak tau ada session yang aktif, jadi $_SESSION gak akan kebaca."
+
+Seputar Login & Keamanan
+
+"Kenapa password disimpan pakai password_hash()?"
+
+"Supaya password aslinya gak kelihatan walaupun database-nya diakses orang lain. password_hash() itu ngubah password jadi kode acak yang gak bisa dibalikin ke bentuk aslinya."
+
+"Apa fungsi password_verify()?"
+
+"Itu buat nyocokin password yang diinput user pas login sama hash yang tersimpan di database. Dia otomatis ngecek apakah keduanya cocok, tanpa perlu ngebalikin hash ke bentuk asli."
+
+"Kalau session di-unset atau destroy, apa yang terjadi?"
+
+"User dianggap keluar/logout, soalnya data sessionnya (kayak username) udah dihapus. Makanya kalau buka halaman yang butuh login lagi, otomatis dilempar balik ke login.php."
+
+"Kenapa dashboard bisa nolak kalau belum login?"
+
+"Di baris paling atas dashboard.php ada pengecekan if (!isset($_SESSION['username'])) { header('Location: login.php'); exit; } — jadi kalau session username belum ada, otomatis dilempar ke halaman login."
+
+"Apakah kode kamu rentan SQL Injection?"
+
+"Jujur Pak/Bu, di versi ini query-nya masih langsung digabung sama input user, jadi secara teori masih rentan. Untuk pengembangan lebih lanjut, idealnya pakai prepared statement (mysqli atau PDO) biar input user gak langsung digabung ke query SQL." (jawaban jujur ini lebih dihargai daripada sok tau)
+
+Seputar Database
+
+"Kenapa pakai tabel terpisah users dan gaji?"
+
+"Karena dua data ini beda konteks — users itu buat akun login, gaji itu buat data slip gaji. Kalau digabung jadi satu tabel malah bikin data campur aduk dan sulit dikelola."
+
+"Apa fungsi AUTO_INCREMENT?"
+
+"Itu bikin kolom id otomatis nambah angkanya setiap ada data baru, jadi saya gak perlu nentuin id manual satu-satu."
+
+"Gimana cara data dari form bisa masuk ke database?"
+
+"Form di tambah.php pakai method POST, terus datanya ditangkap di simpan.php lewat $_POST['nama'] dan sejenisnya, lalu dimasukin ke query INSERT INTO gaji (...) VALUES (...) pakai mysqli_query()."
+
+Seputar Perhitungan Gaji
+
+"Kenapa perhitungan dihitung ulang di PHP, padahal udah ada di JavaScript?" ⭐ (paling sering ditanya)
+
+"Karena JavaScript itu jalan di browser, jadi bisa dimanipulasi user — misalnya lewat Inspect Element, dia bisa ubah angka yang dikirim. Makanya perhitungan yang beneran disimpan ke database itu tetap dihitung ulang di PHP, di sisi server, biar hasilnya tetap valid dan gak bisa dicurangi."
+
+"Coba tunjukkin baris kode rumusnya."
+
+Tunjuk di simpan.php:
+
+php
+$total_penghasilan = $gaji_pokok + $lembur;
+$total_potongan = $pinjaman;
+$gaji_bersih = $total_penghasilan - $total_potongan;
+Seputar Fitur Tambahan
+
+"Kenapa ada captcha?"
+
+"Buat mastiin yang submit form itu manusia beneran, bukan robot/bot otomatis. Soal captcha-nya sengaja dibikin sederhana (perkalian) biar gampang dipahami tapi tetap berfungsi."
+
+"Gimana cara kerja popup pilih periode?"
+
+"Waktu klik Tambah Data, JavaScript nampilin popup buat pilih Bulan dan Tahun. Setelah dipilih, sistem redirect ke tambah.php sambil bawa bulan & tahun itu lewat URL (?bulan=...&tahun=...), terus di situ PHP ngitung otomatis periode dari tanggal 25 bulan sebelumnya sampai tanggal 25 bulan yang dipilih."
+
+"Kenapa PDF cuma pakai window.print()?"
+
+"Karena lebih sederhana dan gak perlu install library tambahan kayak FPDF. Browser modern udah punya fitur print bawaan yang bisa langsung disimpan jadi PDF, jadi lebih ringan buat proyek sekelas ini."
+
+Kalau Diminta Modifikasi Langsung
+
+Kalau diminta nambah field baru misalnya, jangan panik — bilang dulu langkahnya:
+
+"Baik Pak/Bu, saya akan tambahin dulu inputnya di form tambah.php, terus tangkep datanya di simpan.php pakai $_POST, terus tambahin ke query INSERT-nya, dan kalau perlu saya tambahin juga kolomnya di tabel gaji."
+
+ Syntax Error (kurang titik,koma, atau salah penulisan)
+ Runtime Error (misalnya pas mau tambahin data, saat di pencet malah error)
+ Logical Error (logika nya yang error kaya pas masukin bertambahan yang keluar malah perkalian)
+ Singkatan my sql (Structured Query Language )
+oop (Object-Oriented Programming)
+
+tipe data nya 
+VARCHAR(n): Digunakan untuk teks pendek dengan panjang dinamis, seperti nama, username, email, atau password yang sudah di-hash (contoh: username VARCHAR(50)).
+TEXT /: Untuk teks yang panjang, seperti deskripsi produk, artikel, atau catatan
+DATE: Menyimpan format tanggal (YYYY-MM-DD).
+ENUM: Untuk membatasi pilihan nilai tertentu, misalnya status akun
+BLOB: Untuk menyimpan data biner murni
