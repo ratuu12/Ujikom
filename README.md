@@ -71,7 +71,7 @@ Menyimpan data slip gaji yang sudah dibuat.
 | nik                | VARCHAR(30)   | NIK karyawan                        |
 | jabatan            | VARCHAR(50)   | Jabatan karyawan                    |
 | periode            | VARCHAR(100)  | Periode gajian, contoh: "25 November 2025 - 25 Desember 2025" |
-| gaji_pokok         | INT           | Gaji pokok karyawan                 |
+| gaji_pokok         | INTERGEN           | Gaji pokok karyawan                 |
 | lembur             | INT           | Uang lembur                         |
 | pinjaman           | INT           | Potongan pinjaman karyawan          |
 | total_penghasilan  | INT           | Hasil dari gaji_pokok + lembur      |
