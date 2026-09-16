@@ -62,8 +62,8 @@ $hasil = mysqli_query($koneksi, $sql);
                     <td data-label="Gaji Bersih">Rp<?php echo number_format($baris['gaji_bersih'], 0, ',', '.'); ?></td>
                     <td data-label="Aksi" class="aksi">
                         <a href="detail.php?id=<?php echo $baris['id']; ?>" class="lihat">Lihat</a>
+                        <a href="edit.php?id=<?php echo $baris['id']; ?>" class="edit">Edit</a>
                         <a href="hapus.php?id=<?php echo $baris['id']; ?>" class="hapus" onclick="return confirm('Yakin hapus data ini?')">Hapus</a>
-
                         <div class="share-dropdown">
                             <button type="button" class="share" onclick="toggleShare(<?php echo $baris['id']; ?>)">Share</button>
                             <div class="share-menu" id="shareMenu<?php echo $baris['id']; ?>">

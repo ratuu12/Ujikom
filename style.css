@@ -236,6 +236,11 @@ table tr:hover {
     color: #c62828;
 }
 
+.aksi .edit {
+    background-color: #fff8e1;
+    color: #f9a825;
+}
+
 .aksi .share {
     background-color: #e8f5e9;
     color: #2e7d32;
